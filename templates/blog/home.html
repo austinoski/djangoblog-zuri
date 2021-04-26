@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="list-group">
+        {% for post in posts %}
+        <a href="{% url 'post-detail' pk=post.id %}" class="list-group-item list-group-item-action" aria-current="true">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ post.title }}</h5>
+            <small>Comments <span class="badge badge-primary">
+              {{ post.comment_set.count }}
+            </span></small>
+          </div>
+          <p class="mb-1">{{ post.body|truncatewords:20 }}</p>
+          <small>{{ post.author|upper }}</small>
+        </a>
+        {% endfor %}
+    </div>
+{% endblock content %}
