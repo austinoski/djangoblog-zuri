@@ -87,3 +87,17 @@ class BlogTest(TestCase):
         redirect = response.redirect_chain[-1]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(redirect, ('/', 302))
+
+    def test_user_logout(self):
+        self.client.login(username="testuser", password="secret")
+        response = self.client.get(reverse("logout"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Logged out")
+
+    def test_user_comment(self):
+        self.client.login(username="testuser", password="secret")
+        data = {"body": "Sweet comment"}
+        response = self.client.post(reverse("comment-new", args=[str(1)]), data, follow=True)
+        self.assertEqual(response.redirect_chain[-1], ('/post/1/', 302))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sweet comment")
